@@ -1,35 +1,49 @@
 <?php
-	if (!isset($_SESSION)){
-	    session_start();
-	}
-	header("Location: listado.php");
-	require_once("funciones.php");
+// including the database connection file
+include_once("config.php");
+
+// fetching data in descending order (lastest entry first)
+$result = mysqli_query($mysqli, "SELECT * FROM users ORDER BY id DESC");
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 	<meta charset="UTF-8">
-	<title>gestorTaller</title>
-	<?php pintaHeader() ?>
-	<link rel="stylesheet" type="text/css" href="css/login.css">
+	<title>Homepage</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"  crossorigin="anonymous">	
 </head>
+
 <body>
-	<section id="login">
-		<header><img src="img/logo.png"></header>
-		<section id="login-box">
-			<form action="acciones/login.php" method="post">
-				Usuario
-				<br>
-				<input type="text" name="fUsuario" class="text">
-				<br><br>
-				Contraseña
-				<br>
-				<input type="password" name="fPasswd" class="text">
-				<br><br>
-         		<input type="checkbox" id="fRecordarUsuario" value="1"> Recordar usuario
-				<input type="submit" value="Identificar" class="enviar">
-			</form>
-		</section>
-	</section>
+<div class = "container">
+	<div class="jumbotron">
+			<h1 class="display-4">Directorio Usuarios</h1>
+			<p class="lead">Examen 1ª Evaluación</p>
+			<p class="lead">ESTOY EN EL SERVIDOR WEB ????</p>
+    </div>	
+	<a href="add.html" class="btn btn-primary">Add New Data</a><br/><br/>
+	<table width='80%' border=0 class="table">
+
+	<tr bgcolor='#CCCCCC'>
+		<td>Nombre</td>
+		<td>Edad</td>
+		<td>Email</td>
+		<td>Update</td>
+	</tr>
+
+	<?php
+	while($res = mysqli_fetch_array($result)) {
+		echo "<tr>\n";
+		echo "<td>".$res['name']."</td>\n";
+		echo "<td>".$res['age']."</td>\n";
+		echo "<td>".$res['email']."</td>\n";
+		echo "<td><a href=\"edit.php?id=$res[id]\">Edit</a> | <a href=\"delete.php?id=$res[id]\" onClick=\"return confirm('Are you sure you want to delete?')\">Delete</a></td>\n";
+		echo "</tr>\n";
+	}
+
+	mysqli_close($mysqli);
+	?>
+	</table>
+</div>
 </body>
 </html>
